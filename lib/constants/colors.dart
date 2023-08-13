@@ -7,6 +7,8 @@ const buttonsColor = Color.fromARGB(255, 39, 43, 51);
 const containerColor = Color.fromARGB(255, 41, 45, 54);
 const extraColor = Color.fromARGB(255, 38, 255, 215);
 const textColor = Color.fromARGB(255, 255, 255, 255);
+const activeFgColor = Color.fromARGB(255, 255, 255, 255);
+const inactiveFgColor = Color.fromARGB(255, 118, 121, 126);
 
 const lightBackgroundColor = Color.fromARGB(255, 255, 255, 255);
 const lightNumbersColor = Color.fromARGB(255, 0, 0, 0);
