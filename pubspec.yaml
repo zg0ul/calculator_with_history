@@ -38,6 +38,7 @@ dependencies:
   math_expressions: ^2.4.0
   intl: ^0.18.1
   toggle_switch: ^2.1.0
+  flutter_swipe_detector: ^2.0.0
 
 dev_dependencies:
   flutter_test:

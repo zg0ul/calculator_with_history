@@ -1,6 +1,7 @@
 import 'package:calculator_with_history/constants/colors.dart';
 import 'package:calculator_with_history/widgets/calculator_buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -86,15 +87,28 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Container(
                     alignment: Alignment.centerRight,
-                    child: RichText(
-                      textAlign: TextAlign.end,
-                      text: TextSpan(
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
+                    child: SwipeDetector(
+                      onSwipeLeft: (offset) {
+                        setState(() {
+                          if (equation.endsWith('ANS')) {
+                            equation =
+                                equation.substring(0, equation.length - 3);
+                          } else {
+                            equation =
+                                equation.substring(0, equation.length - 1);
+                          }
+                        });
+                      },
+                      child: RichText(
+                        textAlign: TextAlign.end,
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: _getEquationSpans(),
                         ),
-                        children: _getEquationSpans(),
                       ),
                     ),
                   ),
