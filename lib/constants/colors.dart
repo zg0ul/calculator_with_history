@@ -8,10 +8,12 @@ const containerColor = Color.fromARGB(255, 41, 45, 54);
 const extraColor = Color.fromARGB(255, 38, 255, 215);
 const textColor = Color.fromARGB(255, 255, 255, 255);
 const activeFgColor = Color.fromARGB(255, 255, 255, 255);
-const inactiveFgColor = Color.fromARGB(255, 118, 121, 126);
 
 const lightBackgroundColor = Color.fromARGB(255, 255, 255, 255);
 const lightNumbersColor = Color.fromARGB(255, 0, 0, 0);
 const lightContainerColor = Color.fromARGB(255, 249, 249, 249);
 const lightButtonsColor = Color.fromARGB(255, 247, 247, 247);
 const lightTextColor = Color.fromARGB(255, 0, 0, 0);
+
+const inactiveFgColor = Color.fromARGB(255, 118, 121, 126);
+const lightInactiveFgColor = Color.fromARGB(255, 223, 223, 223);
