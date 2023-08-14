@@ -132,12 +132,63 @@ class _HomeScreenState extends State<HomeScreen> {
                 equation: equation, // Pass the equation string
                 updateEquation: updateEquation, // Pass the function
                 equalPressed: equalPressed,
+                makePercent: makePercent,
+                toggleSign: toggleSign,
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void toggleSign() {
+    List<TextSpan> spans = _getEquationSpans();
+    TextSpan lastOperator = spans[spans.length - 2];
+    String? lastOperatorText = lastOperator.text;
+    late final String modifiedOperator;
+
+    if (lastOperatorText != null) {
+      if (lastOperatorText == '+' || lastOperatorText == '') {
+        modifiedOperator = '-';
+      } else if (lastOperatorText == '-') {
+        modifiedOperator = '+';
+      }
+      List<TextSpan> replacement = [
+        TextSpan(
+          text: modifiedOperator,
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        ),
+        // spans.last,
+      ];
+      spans.replaceRange(spans.length - 2, spans.length - 1, replacement);
+      setState(() {
+        // Rebuild the equation text by joining the spans
+        equation = spans.map((span) => span.text).join();
+      });
+    }
+  }
+
+  void makePercent() {
+    List<TextSpan> spans = _getEquationSpans();
+    String? lastNumber = spans.last.text;
+
+    if (lastNumber != null) {
+      double numberAsDouble = double.tryParse(lastNumber) ?? 0.0;
+      String modifiedNumber = (numberAsDouble / 100).toString();
+
+      spans.removeLast(); // Remove the old last element
+      spans.add(
+        TextSpan(
+          text: modifiedNumber,
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        ),
+      );
+      setState(() {
+        // Rebuild the equation text by joining the spans
+        equation = spans.map((span) => span.text).join();
+      });
+    }
   }
 
   List<TextSpan> _getEquationSpans() {

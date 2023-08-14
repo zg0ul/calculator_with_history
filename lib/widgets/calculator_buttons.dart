@@ -6,12 +6,15 @@ class CreateButtons extends StatefulWidget {
   final String equation;
   final Function(String) updateEquation;
   final Function(String) equalPressed;
+  final Function() makePercent;
+  final Function() toggleSign;
 
   const CreateButtons({
     super.key,
     required this.equation,
     required this.updateEquation,
     required this.equalPressed,
+    required this.makePercent, required this.toggleSign,
   });
 
   @override
@@ -37,20 +40,20 @@ class CreateButtonsState extends State<CreateButtons> {
               },
             ),
             Button(
-              text: '(',
+              text: '±',
               color: extraColor,
               buttonTapped: () {
                 setState(() {
-                  widget.updateEquation('(');
+                  widget.toggleSign();
                 });
               },
             ),
             Button(
-              text: ')',
+              text: '%',
               color: extraColor,
               buttonTapped: () {
                 setState(() {
-                  widget.updateEquation(')');
+                  widget.makePercent();
                 });
               },
             ),
@@ -70,7 +73,7 @@ class CreateButtonsState extends State<CreateButtons> {
           children: [
             Button(
               text: '7',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('7');
@@ -79,7 +82,7 @@ class CreateButtonsState extends State<CreateButtons> {
             ),
             Button(
               text: '8',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('8');
@@ -88,7 +91,7 @@ class CreateButtonsState extends State<CreateButtons> {
             ),
             Button(
               text: '9',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('9');
@@ -111,7 +114,7 @@ class CreateButtonsState extends State<CreateButtons> {
           children: [
             Button(
               text: '4',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('4');
@@ -120,7 +123,7 @@ class CreateButtonsState extends State<CreateButtons> {
             ),
             Button(
               text: '5',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('5');
@@ -129,7 +132,7 @@ class CreateButtonsState extends State<CreateButtons> {
             ),
             Button(
               text: '6',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('6');
@@ -152,7 +155,7 @@ class CreateButtonsState extends State<CreateButtons> {
           children: [
             Button(
               text: '1',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('1');
@@ -161,7 +164,7 @@ class CreateButtonsState extends State<CreateButtons> {
             ),
             Button(
               text: '2',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('2');
@@ -170,7 +173,7 @@ class CreateButtonsState extends State<CreateButtons> {
             ),
             Button(
               text: '3',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('3');
@@ -202,7 +205,7 @@ class CreateButtonsState extends State<CreateButtons> {
             ),
             Button(
               text: '0',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('0');
@@ -211,7 +214,7 @@ class CreateButtonsState extends State<CreateButtons> {
             ),
             Button(
               text: '.',
-              color: numbersColor,
+              color: Theme.of(context).colorScheme.secondary,
               buttonTapped: () {
                 setState(() {
                   widget.updateEquation('.');
