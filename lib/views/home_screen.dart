@@ -1,6 +1,7 @@
 import 'package:calculator_with_history/calculation_history.dart';
 import 'package:calculator_with_history/constants/colors.dart';
 import 'package:calculator_with_history/theme/theme_model.dart';
+import 'package:calculator_with_history/views/drawer.dart';
 import 'package:calculator_with_history/widgets/calculator_buttons.dart';
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String equation = ''; // State for the equation
   String calculation = '';
-  String ansHistory = '';
+  static String ansHistory = '';
   List<CalculationHistory> calculationHistory = [];
   late Box<CalculationHistory> historyBox;
 
@@ -46,75 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, ThemeModel themeNotifier, child) {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
-          drawer: Drawer(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            width: 250,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 35.0, bottom: 3),
-                  child: Text(
-                    "Calculation History",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: ListView.builder(
-                      itemCount: calculationHistory.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: ListTile(
-                            title: Expanded(
-                              child: Container(
-                                // height: 48,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .secondaryContainer,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          calculationHistory[index]
-                                              .result
-                                              .toString(),
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary),
-                                        ),
-                                        Text(
-                                          calculationHistory[index].equation,
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          drawer: CalculatorDrawer(
+            updateAnsHistory: updateAnsHistory,
+            emptyHistory: emptyHistory,
+            calculationHistory: calculationHistory,
           ),
           body: Column(
             children: [
@@ -287,54 +223,117 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void toggleSign() {
-    List<TextSpan> spans = _getEquationSpans();
-    TextSpan lastOperator = spans[spans.length - 2];
-    String? lastOperatorText = lastOperator.text;
-    late final String modifiedOperator;
-
-    if (lastOperatorText != null) {
-      if (lastOperatorText == '+' || lastOperatorText == '') {
-        modifiedOperator = '-';
-      } else if (lastOperatorText == '-') {
-        modifiedOperator = '+';
-      }
-      List<TextSpan> replacement = [
-        TextSpan(
-          text: modifiedOperator,
-          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-        ),
-        // spans.last,
-      ];
-      spans.replaceRange(spans.length - 2, spans.length - 1, replacement);
-      setState(() {
-        // Rebuild the equation text by joining the spans
-        equation = spans.map((span) => span.text).join();
-      });
-    }
+  void emptyHistory() {
+    setState(() {
+      calculationHistory = [];
+      historyBox.clear();
+    });
   }
+
+  void toggleSign() {
+    String operators = '+-x÷';
+    String modifiedEquation = equation;
+
+    // if the equation doesn't start with an operator, add a - sign since it originally indicates a positive number then toggle the sign
+    if (!operators.contains(equation[0])) {
+      modifiedEquation = "-$modifiedEquation";
+    }
+
+    for (int i = equation.length - 1; i >= 0; i--) {
+      if (operators.contains(equation[i])) {
+        modifiedEquation = modifiedEquation.replaceRange(
+            i,
+            i + 1,
+            equation[i] == '+'
+                ? '-'
+                : (equation[i] == '-' ? '+' : equation[i]));
+        break;
+      }
+    }
+
+    setState(() {
+      equation = modifiedEquation;
+    });
+  }
+
+  // void toggleSign() {
+  //   List<TextSpan> spans = _getEquationSpans();
+
+  //   // Find the index of the operator to toggle
+  //   int operatorIndex = spans.lastIndexWhere((span) =>
+  //       span.text == ' + ' ||
+  //       span.text == ' - ' ||
+  //       span.text == ' x ' ||
+  //       span.text == ' ÷ ');
+
+  //   print(operatorIndex);
+  //   if (operatorIndex >= 0) {
+  //     TextSpan operatorSpan = spans[operatorIndex];
+  //     String originalOperator = operatorSpan.text!;
+
+  //     String modifiedOperator = '';
+  //     if (originalOperator == ' + ') {
+  //       modifiedOperator = '-';
+  //     } else if (originalOperator == ' - ') {
+  //       modifiedOperator = '+';
+  //     }
+
+  //     // Replace the operator span with the modified operator
+  //     spans[operatorIndex] = TextSpan(
+  //       text: modifiedOperator,
+  //       style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+  //     );
+
+  //     // Rebuild the equation text by joining the spans
+  //     equation = spans.map((span) => span.text).join();
+
+  //     setState(() {});
+  //   }
+  // }
 
   void makePercent() {
-    List<TextSpan> spans = _getEquationSpans();
-    String? lastNumber = spans.last.text;
+    String modifiedEquation = equation;
+    List<String> operators = ['+', '-', 'x', '÷'];
 
-    if (lastNumber != null) {
-      double numberAsDouble = double.tryParse(lastNumber) ?? 0.0;
-      String modifiedNumber = (numberAsDouble / 100).toString();
+    for (int i = equation.length - 1; i >= 0; i--) {
+      String char = equation[i];
+      if (operators.contains(char) || i == 0) {
+        String number = equation.substring(i == 0 ? 0 : i + 1);
+        double numberAsDouble = double.tryParse(number) ?? 0.0;
+        String modifiedNumber = (numberAsDouble / 100).toString();
 
-      spans.removeLast(); // Remove the old last element
-      spans.add(
-        TextSpan(
-          text: modifiedNumber,
-          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-        ),
-      );
-      setState(() {
-        // Rebuild the equation text by joining the spans
-        equation = spans.map((span) => span.text).join();
-      });
+        modifiedEquation = modifiedEquation.replaceRange(
+            i == 0 ? 0 : i + 1, equation.length, modifiedNumber);
+        break;
+      }
     }
+
+    setState(() {
+      equation = modifiedEquation;
+    });
   }
+
+  // void makePercent() {
+  //   List<TextSpan> spans = _getEquationSpans();
+  //   String? lastNumber = spans.last.text;
+
+  //   if (lastNumber != null) {
+  //     double numberAsDouble = double.tryParse(lastNumber) ?? 0.0;
+  //     String modifiedNumber = (numberAsDouble / 100).toString();
+
+  //     spans.removeLast(); // Remove the old last element
+  //     spans.add(
+  //       TextSpan(
+  //         text: modifiedNumber,
+  //         style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+  //       ),
+  //     );
+  //     setState(() {
+  //       // Rebuild the equation text by joining the spans
+  //       equation = spans.map((span) => span.text).join();
+  //     });
+  //   }
+  // }
 
   // Function to calculate the answer
   void equalPressed(String equation) {
@@ -353,7 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       calculation = NumberFormat.decimalPattern().format(eval);
-      ansHistory = calculation;
+      updateAnsHistory(calculation);
       calculationHistory.insert(
           0, CalculationHistory(equation: equation, result: calculation));
       equation = '';
@@ -389,31 +388,56 @@ class _HomeScreenState extends State<HomeScreen> {
       String char = equation[i];
 
       if (char == '+' || char == '-' || char == 'x' || char == '÷') {
+        if (currentNumber.isNotEmpty) {
+          spans.add(
+            TextSpan(
+              text: '$currentNumber',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+          );
+          currentNumber = '';
+        }
         spans.add(
           TextSpan(
-            text: ' $currentNumber ',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-          ),
-        );
-        spans.add(
-          TextSpan(
-            text: char,
+            text: ' $char ',
             style: const TextStyle(color: operationsColor),
           ),
         ); // Change color for operators
-        currentNumber = '';
       } else {
         currentNumber += char;
       }
     }
 
-    spans.add(
-      TextSpan(
-        text: ' $currentNumber ',
-        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-      ),
-    );
+    if (currentNumber.isNotEmpty) {
+      spans.add(
+        TextSpan(
+          text: '$currentNumber',
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        ),
+      );
+    }
 
     return spans;
+  }
+
+  getEquationText() {
+    // responsible for getting the RichText to be displayed in the calculation history.
+    return RichText(
+      textAlign: TextAlign.end,
+      text: TextSpan(
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.secondary,
+          fontSize: 36,
+          fontWeight: FontWeight.bold,
+        ),
+        children: _getEquationSpans(),
+      ),
+    );
+  }
+
+  updateAnsHistory(String newAns) {
+    setState(() {
+      ansHistory = newAns;
+    });
   }
 }
