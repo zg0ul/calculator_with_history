@@ -235,9 +235,10 @@ class _HomeScreenState extends State<HomeScreen> {
     String modifiedEquation = equation;
 
     // if the equation doesn't start with an operator, add a - sign since it originally indicates a positive number then toggle the sign
-    if (!operators.contains(equation[0])) {
-      modifiedEquation = "-$modifiedEquation";
-    }
+    // if (!operators.contains(equation[0])) {
+    //   modifiedEquation = "-$modifiedEquation";
+    // }
+    // print(equation[0]);
 
     for (int i = equation.length - 1; i >= 0; i--) {
       if (operators.contains(equation[i])) {
