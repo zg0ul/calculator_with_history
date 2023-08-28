@@ -56,61 +56,59 @@ class _CalculatorDrawerState extends State<CalculatorDrawer> {
                             context: context, message: "Answer Copied!");
                       },
                       child: ListTile(
-                        title: Expanded(
-                          child: Container(
-                            // height: 48,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 8,
-                                          right: 16.0,
-                                          bottom: 4,
-                                        ),
-                                        child: Text(
-                                          widget
-                                              .calculationHistory[index].result
-                                              .toString(),
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                        title: Container(
+                          // height: 48,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 8,
+                                        right: 16.0,
+                                        bottom: 4,
+                                      ),
+                                      child: Text(
+                                        widget
+                                            .calculationHistory[index].result
+                                            .toString(),
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 8.0, left: 16.0),
-                                        child: Text(
-                                          widget.calculationHistory[index]
-                                              .equation,
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            fontSize: 16,
-                                          ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0, left: 16.0),
+                                      child: Text(
+                                        widget.calculationHistory[index]
+                                            .equation,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          fontSize: 16,
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
